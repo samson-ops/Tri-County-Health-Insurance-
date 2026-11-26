@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tri State Health Insurance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, plain-spoken, established regional insurer; no hype.
+   IDEA: a member services counter: find a plan, find care, get things done.
+   PICTURE: the supplied family photograph, full-bleed, with the plan finder beside it.
+   COLOUR and TYPE: logo navy #063940 and teal #057973 lead, logo green as a small accent; Montserrat (matches the wordmark) + Source Sans 3.
+   LAYOUT: utility bar, nav, hero + finder, plan types, find care, member tools, guides, licensing, footer. */
+:root{color-scheme:light;--navy:#063940;--navy-2:#0a2d33;--teal:#057973;--teal-d:#04645f;--blue:#017bbb;--green:#7ac447;--tint:#eef6f5;--line:#d7e3e2;--ink:#1d2b2e;--muted:#52615f;--bg:#fff}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:90px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Montserrat,"Source Sans 3",system-ui,sans-serif;color:var(--navy);margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,4.2vw,50px);line-height:1.08;font-weight:700}
+h2{font-size:clamp(26px,2.8vw,34px);line-height:1.15;font-weight:700}
+h3{font-size:19px;line-height:1.3;font-weight:600}
+p{margin:0}
+a{color:var(--teal-d)}
+a:hover{color:var(--navy)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(4vw,16px)}
+.band{padding:clamp(48px,6vw,88px) 0}
+.lead{font-size:19px;color:var(--muted);max-width:60ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 22px;border-radius:6px;font:600 16px/1 "Source Sans 3",sans-serif;text-decoration:none;border:2px solid transparent;cursor:pointer;white-space:nowrap}
+.btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:var(--teal-d);color:#fff}
+.btn-outline{border-color:var(--teal);color:var(--teal-d);background:#fff}.btn-outline:hover{background:var(--tint)}
+.more{font-weight:600;text-decoration:none}.more::after{content:" \203A"}
+.more:hover{text-decoration:underline}
+
+/* utility bar */
+.util{background:var(--navy-2);color:#cfe3e1;font-size:14px}
+.util .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;min-height:38px}
+.util a{color:#e6f1f0;text-decoration:none}.util a:hover{text-decoration:underline;color:#fff}
+.util nav{display:flex;gap:4px;flex-wrap:wrap}
+.util nav a{padding:8px 10px}
+.util nav a[aria-current]{background:#fff;color:var(--navy);border-radius:4px 4px 0 0;font-weight:600}
+.util .right{display:flex;gap:18px;flex-wrap:wrap}
+
+/* header */
+header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+header.site .wrap{display:flex;align-items:center;gap:28px;min-height:82px}
+.brand img{height:54px;width:auto;display:block}
+.mainnav{display:flex;gap:2px;margin-right:auto}
+.mainnav a{color:var(--navy);text-decoration:none;font-weight:600;padding:10px 14px;border-radius:4px}
+.mainnav a:hover{background:var(--tint)}
+.hdr-actions{display:flex;gap:10px}
+.menu-btn{display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:6px;min-height:44px;padding:0 14px;font:600 16px "Source Sans 3",sans-serif;color:var(--navy)}
+
+/* hero */
+.hero{position:relative;background:#e9f4f6 url(img/hero.jpg) 70% 30%/cover no-repeat}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(236,246,247,.94) 0%,rgba(236,246,247,.8) 32%,rgba(236,246,247,0) 52%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1;min-height:540px;display:flex;align-items:center;padding-top:48px;padding-bottom:120px}
+.hero-copy{max-width:560px}
+.hero-copy p{margin-top:18px;font-size:19px;color:#2c3d40}
+.hero-copy ul{margin:22px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-weight:600;color:var(--navy)}
+.hero-copy li::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:10px;vertical-align:2px}
+.finder-wrap{position:relative;z-index:2;margin-top:-84px}
+.finder{background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(6,57,64,.16);border:1px solid var(--line);overflow:hidden}
+.tabs{display:flex;border-bottom:1px solid var(--line);background:#f5f8f8}
+.tabs button{background:transparent;border:0;border-bottom:3px solid transparent;min-height:52px;font:600 16px/1.2 "Source Sans 3",sans-serif;color:var(--muted);cursor:pointer;padding:6px 24px}
+.tabs button[aria-selected=true]{background:#fff;color:var(--navy);border-bottom-color:var(--teal)}
+.finder form{padding:20px 24px 22px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr) auto;gap:16px;align-items:end}
+.finder h2{font-size:20px;grid-column:1/-1}
+.finder .msg,.finder .fine{grid-column:1/-1}
+label{display:block;font-weight:600;font-size:15px;color:var(--navy);margin-bottom:5px}
+input,select{width:100%;min-height:46px;border:1px solid #a9bcbb;border-radius:6px;padding:0 12px;font:16px "Source Sans 3",sans-serif;color:var(--ink);background:#fff}
+input:focus,select:focus{border-color:var(--teal);outline:2px solid rgba(5,121,115,.25)}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.fine{font-size:14px;color:var(--muted)}
+.msg{font-size:15px;background:var(--tint);border-left:3px solid var(--teal);padding:10px 12px;display:none}
+.msg.on{display:block}
+
+/* notice */
+.notice{margin-top:32px;background:var(--tint);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.notice .wrap{display:flex;gap:10px 24px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding-top:16px;padding-bottom:16px}
+.notice strong{color:var(--navy)}
+
+/* plan types */
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px 40px;flex-wrap:wrap;margin-bottom:36px}
+.plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.plan{border:1px solid var(--line);border-radius:10px;padding:26px 24px;display:flex;flex-direction:column;gap:12px;background:#fff}
+.plan:hover{border-color:#9cc7c3;box-shadow:0 6px 18px rgba(6,57,64,.08)}
+.ico{width:60px;height:60px;border-radius:50%;background:var(--tint);display:grid;place-items:center;flex:none}
+.ico img{width:42px;height:42px}
+.plan p{color:var(--muted);font-size:16px}
+.plan ul{margin:0;padding-left:18px;font-size:15px;color:var(--ink)}
+.plan .more{margin-top:auto;padding-top:6px}
+
+/* find care */
+.care{background:var(--navy);color:#d9eae8}
+.care h2{color:#fff}
+.care .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:start}
+.care .lead{color:#c3dad8}
+.search{background:#fff;border-radius:10px;padding:24px;margin-top:28px;display:grid;gap:14px;color:var(--ink)}
+.care-list{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1px;background:rgba(255,255,255,.12);border-radius:10px;overflow:hidden}
+.care-item{background:#0b444b;padding:26px 24px;display:grid;gap:10px;align-content:start}
+.care-item .ico{background:#eef6f5}
+.care-item h3{color:#fff}
+.care-item p{font-size:16px}
+.care-item a{color:#9fe0cf}
+.care-item a:hover{color:#fff}
+
+/* members */
+.members .wrap{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:48px;align-items:start}
+.tasks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--line);margin-top:28px}
+.tasks a{display:block;padding:18px 16px 18px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.tasks a strong{display:block;color:var(--navy);font-size:17px}
+.tasks a span{font-size:15px;color:var(--muted)}
+.tasks a:hover strong{color:var(--teal);text-decoration:underline}
+.signin{background:var(--tint);border-radius:10px;padding:28px;display:grid;gap:14px}
+.signin h3{font-size:21px}
+.app-note{display:flex;gap:14px;align-items:center;border-top:1px solid var(--line);padding-top:16px;font-size:15px}
+
+/* guides */
+.guides{background:#f6f9f9;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px 24px;display:flex;flex-direction:column;gap:10px}
+.card .kind{font-size:14px;font-weight:600;color:var(--teal-d)}
+.card p{color:var(--muted);font-size:16px}
+.card .more{margin-top:auto}
+
+/* licensing */
+.trust .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+.badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.badge{border:1px dashed #9fb3b1;border-radius:8px;min-height:96px;display:grid;place-items:center;text-align:center;padding:10px;font-size:14px;color:var(--muted)}
+.trust ul{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:12px}
+.trust li{display:flex;gap:12px;align-items:start}
+.trust li img{width:34px;height:34px;flex:none}
+
+/* footer */
+footer{background:var(--navy-2);color:#b9d0ce;font-size:15px}
+footer a{color:#e3efee;text-decoration:none}footer a:hover{text-decoration:underline;color:#fff}
+.ft-top{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(4,minmax(0,1fr));gap:32px;padding:56px 0 40px}
+.ft-top img{height:52px;width:auto}
+.ft-top h4{font:600 15px Montserrat,sans-serif;color:#fff;margin:0 0 12px}
+.ft-top ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.contact{margin-top:20px;display:grid;gap:4px}
+.contact strong{color:#fff;font-size:18px}
+.ph{display:inline-block;font-size:12px;font-weight:600;background:#f2c94c;color:#3a2e00;border-radius:3px;padding:1px 6px;vertical-align:2px}
+.legal{border-top:1px solid rgba(255,255,255,.14);padding:24px 0 36px;display:grid;gap:16px}
+.legal nav{display:flex;flex-wrap:wrap;gap:8px 22px}
+.legal p{font-size:14px;color:#9db8b5;max-width:110ch}
+
+@media (max-width:1080px){
+  .mainnav,.hdr-actions .btn-outline{display:none}
+  .menu-btn{display:inline-flex;align-items:center}
+  .hdr-actions{margin-left:0}
+  .mainnav.open{display:grid;position:absolute;top:100%;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);padding:8px max(4vw,16px) 16px}
+  .plans{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ft-top{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ft-top>div:first-child{grid-column:1/-1}
+}
+@media (max-width:900px){
+  .hero{background:#fff}
+  .hero::after{display:none}
+  .hero::before{content:"";display:block;aspect-ratio:16/9;background:url(img/hero-sm.jpg) 75% center/cover}
+  .hero .wrap{min-height:0;padding-top:28px;padding-bottom:28px}
+  .finder-wrap{margin-top:0}
+  .finder{box-shadow:none}
+  .finder form{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .finder form>div:first-of-type,.finder form .btn{grid-column:1/-1}
+  .care .wrap,.members .wrap,.trust .wrap{grid-template-columns:minmax(0,1fr);gap:36px}
+  .cards{grid-template-columns:minmax(0,1fr)}
+  .tasks{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .util .right{display:none}
+  .util nav{flex-wrap:nowrap;overflow-x:auto}.util nav a{flex:none}
+  .brand img{height:42px}
+  .hdr-actions .btn-primary{display:none}
+  .plans,.care-list,.tasks,.row2,.finder form{grid-template-columns:minmax(0,1fr)}
+  .tabs button{flex:1;padding:6px 8px;font-size:15px}
+  .ft-top{grid-template-columns:minmax(0,1fr)}
+  .badges{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:no-preference){.plan,.btn{transition:background .15s,box-shadow .15s,border-color .15s}}
+</style>
+</head>
+<body>
+
+<div class="util">
+  <div class="wrap">
+    <nav aria-label="Audience">
+      <a href="#" aria-current="page">Individuals &amp; Families</a>
+      <a href="#">Medicare</a>
+      <a href="#">Employers</a>
+      <a href="#">Providers</a>
+      <a href="#">Brokers</a>
+    </nav>
+    <div class="right">
+      <a href="#find-care">Find a doctor</a>
+      <a href="#contact">Contact us</a>
+      <a href="#" lang="es">Español</a>
+    </div>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Tri State Affordable Health Insurance home"><img src="img/logo.png" alt="Tri State Affordable Health Insurance" width="768" height="200"></a>
+    <nav class="mainnav" id="mainnav" aria-label="Main">
+      <a href="#plans">Shop plans</a>
+      <a href="#find-care">Find care</a>
+      <a href="#members">Members</a>
+      <a href="#find-care">Pharmacy</a>
+      <a href="#guides">Resources</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mainnav">Menu</button>
+    <div class="hdr-actions">
+      <a class="btn btn-outline" href="#members">Member sign in</a>
+      <a class="btn btn-primary" href="#quote">Get a quote</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap">
+    <div class="hero-copy">
+      <h1 id="hero-title">Health coverage for every generation of your family</h1>
+      <p>Individual, family, Medicare and employer plans with a local network of doctors and hospitals, and people who answer the phone when you call.</p>
+      <ul>
+        <li>Plans for every stage of life</li>
+        <li>Preventive care covered at no extra cost</li>
+        <li>Help choosing a plan from licensed local advisors</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<div class="finder-wrap"><div class="wrap">
+    <div class="finder" id="quote">
+      <div class="tabs" role="tablist" aria-label="Plan type">
+        <button role="tab" aria-selected="true" data-k="ind">Individual &amp; Family</button>
+        <button role="tab" aria-selected="false" data-k="med">Medicare</button>
+        <button role="tab" aria-selected="false" data-k="emp">Employer</button>
+      </div>
+      <form id="finderForm" novalidate>
+        <h2 id="finderTitle">Find a plan that fits</h2>
+        <div>
+          <label for="zip">ZIP code</label>
+          <input id="zip" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="e.g. 10001">
+        </div>
+          <div>
+            <label for="who" id="whoLabel">Who needs coverage</label>
+            <select id="who">
+              <option>Just me</option><option>Me and my spouse</option><option>Me and my children</option><option>My whole family</option>
+            </select>
+          </div>
+          <div>
+            <label for="start">Coverage starts</label>
+            <select id="start"><option>January 1, 2027</option><option>February 1, 2027</option><option>Not sure yet</option></select>
+          </div>
+        <button class="btn btn-primary" type="submit">See plans and prices</button>
+        <p class="msg" id="finderMsg" role="status"></p>
+        <p class="fine">Prefer to talk it through? A licensed advisor can help. Call <strong>1-800-000-0000</strong> <span class="ph">Placeholder</span></p>
+      </form>
+    </div>
+</div></div>
+
+<div class="notice">
+  <div class="wrap">
+    <p><strong>Open Enrollment is underway.</strong> Enroll by December 15 for coverage that starts January 1.</p>
+    <a class="more" href="#guides">Key dates and deadlines</a>
+  </div>
+</div>
+
+<section class="band" id="plans" aria-labelledby="plans-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 id="plans-title">Find the right kind of coverage</h2>
+        <p class="lead" style="margin-top:10px">Compare plan types side by side, then talk to an advisor about the details that matter to you.</p>
+      </div>
+      <a class="btn btn-outline" href="#">Compare all plans</a>
+    </div>
+    <div class="plans">
+      <article class="plan">
+        <div class="ico"><img src="img/icon-family.png" alt=""></div>
+        <h3>Individual &amp; Family</h3>
+        <p>For people who buy their own coverage, including those who qualify for premium tax credits.</p>
+        <ul><li>Bronze, Silver and Gold tiers</li><li>Pediatric dental and vision</li></ul>
+        <a class="more" href="#">Shop family plans</a>
+      </article>
+      <article class="plan">
+        <div class="ico"><img src="img/icon-care.png" alt=""></div>
+        <h3>Medicare</h3>
+        <p>Medicare Advantage and Part D options for people 65 and older, or eligible due to disability.</p>
+        <ul><li>Medical and drug coverage in one plan</li><li>Dental, vision and hearing extras</li></ul>
+        <a class="more" href="#">Explore Medicare</a>
+      </article>
+      <article class="plan">
+        <div class="ico"><img src="img/icon-clipboard.png" alt=""></div>
+        <h3>Employer group</h3>
+        <p>Group health plans for businesses with 2 or more employees, with simple online administration.</p>
+        <ul><li>Flexible contribution options</li><li>Dedicated account support</li></ul>
+        <a class="more" href="#">Plans for employers</a>
+      </article>
+      <article class="plan">
+        <div class="ico"><img src="img/icon-shield.png" alt=""></div>
+        <h3>Dental, vision &amp; supplemental</h3>
+        <p>Add coverage that fills the gaps in a medical plan, available on its own or as an add-on.</p>
+        <ul><li>Dental and vision plans</li><li>Accident and hospital indemnity</li></ul>
+        <a class="more" href="#">See add-on coverage</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band care" id="find-care" aria-labelledby="care-title">
+  <div class="wrap">
+    <div>
+      <h2 id="care-title">Find a doctor, hospital or pharmacy</h2>
+      <p class="lead" style="margin-top:12px">Search our provider directory to see who is in network for your plan before you book a visit.</p>
+      <form class="search" id="docForm" novalidate>
+        <div>
+          <label for="q">Name, specialty or facility</label>
+          <input id="q" placeholder="e.g. Pediatrics, Dr. Patel, urgent care">
+        </div>
+        <div class="row2">
+          <div><label for="dzip">ZIP code</label><input id="dzip" inputmode="numeric" maxlength="5"></div>
+          <div><label for="net">Plan network</label>
+            <select id="net"><option>All networks</option><option>Individual &amp; Family</option><option>Medicare Advantage</option><option>Employer group</option></select></div>
+        </div>
+        <button class="btn btn-primary" type="submit">Search the directory</button>
+        <p class="msg" id="docMsg" role="status"></p>
+      </form>
+    </div>
+    <div class="care-list">
+      <div class="care-item">
+        <div class="ico"><img src="img/icon-doctor.png" alt=""></div>
+        <h3>Doctors and specialists</h3>
+        <p>Choose a primary care provider and find specialists who accept your plan.</p>
+        <a class="more" href="#">Find a doctor</a>
+      </div>
+      <div class="care-item">
+        <div class="ico"><img src="img/icon-hospital.png" alt=""></div>
+        <h3>Hospitals and urgent care</h3>
+        <p>Locate in-network hospitals, urgent care centers and labs near you.</p>
+        <a class="more" href="#">Find a facility</a>
+      </div>
+      <div class="care-item">
+        <div class="ico"><img src="img/icon-pharmacy.png" alt=""></div>
+        <h3>Pharmacy and prescriptions</h3>
+        <p>Check your plan's drug list, compare costs and set up home delivery.</p>
+        <a class="more" href="#">Check drug coverage</a>
+      </div>
+      <div class="care-item">
+        <div class="ico"><img src="img/icon-heart.png" alt=""></div>
+        <h3>24/7 nurse line</h3>
+        <p>Talk with a registered nurse any time, day or night, at no cost to members.</p>
+        <a class="more" href="#contact">Get the number</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band members" id="members" aria-labelledby="members-title">
+  <div class="wrap">
+    <div>
+      <h2 id="members-title">Member resources</h2>
+      <p class="lead" style="margin-top:10px">Manage your plan online, any time.</p>
+      <nav class="tasks" aria-label="Member tasks">
+        <a href="#"><strong>Pay my premium</strong><span>One-time or automatic payments</span></a>
+        <a href="#"><strong>Get my ID card</strong><span>Print, download or request a new card</span></a>
+        <a href="#"><strong>Check a claim</strong><span>Status, history and explanations of benefits</span></a>
+        <a href="#"><strong>View my benefits</strong><span>Deductible, copays and what's covered</span></a>
+        <a href="#"><strong>Prior authorization</strong><span>See what needs approval before care</span></a>
+        <a href="#"><strong>Forms and documents</strong><span>Plan documents, notices and forms</span></a>
+      </nav>
+    </div>
+    <aside class="signin" aria-labelledby="signin-title">
+      <h3 id="signin-title">Already a member?</h3>
+      <p class="fine">Sign in to see your claims, coverage and ID card in one place.</p>
+      <a class="btn btn-primary" href="#">Sign in</a>
+      <a class="btn btn-outline" href="#">Create an account</a>
+      <div class="app-note"><div class="ico" style="background:#fff"><img src="img/icon-shield.png" alt=""></div><p>Your account is protected with two-step verification.</p></div>
+    </aside>
+  </div>
+</section>
+
+<section class="band guides" id="guides" aria-labelledby="guides-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="guides-title">Understanding your coverage</h2>
+      <a class="more" href="#">All guides</a>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="kind">Choosing a plan</span>
+        <h3>HMO, PPO or EPO: what's the difference?</h3>
+        <p>How each plan type handles referrals, out-of-network care and monthly cost, so you can pick the one that matches how you use care.</p>
+        <a class="more" href="#">Read the guide</a>
+      </article>
+      <article class="card">
+        <span class="kind">Enrollment</span>
+        <h3>Life changes that let you enroll outside Open Enrollment</h3>
+        <p>Marriage, a new baby, a move or losing other coverage can open a Special Enrollment Period. Here is what qualifies and how long you have.</p>
+        <a class="more" href="#">Read the guide</a>
+      </article>
+      <article class="card">
+        <span class="kind">Costs</span>
+        <h3>Deductibles, copays and coinsurance, explained</h3>
+        <p>A plain walk-through of what you pay and when, with an example of a doctor visit and a hospital stay.</p>
+        <a class="more" href="#">Read the guide</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band trust" aria-labelledby="trust-title">
+  <div class="wrap">
+    <div>
+      <h2 id="trust-title">A regional health plan you can count on</h2>
+      <ul>
+        <li><img src="img/icon-hospital.png" alt=""><span>A provider network built around the hospitals and practices in our three-state service area.</span></li>
+        <li><img src="img/icon-care.png" alt=""><span>Member services based locally, with licensed advisors to help you enroll and use your plan.</span></li>
+        <li><img src="img/icon-clipboard.png" alt=""><span>Licensed to offer health coverage in State One, State Two and State Three. <span class="ph">Placeholder</span></span></li>
+      </ul>
+    </div>
+    <div>
+      <div class="badges" aria-label="Accreditation badges">
+        <div class="badge">Accreditation badge</div>
+        <div class="badge">Quality rating badge</div>
+        <div class="badge">State licensing seal</div>
+      </div>
+      <p class="fine" style="margin-top:10px">Badge spaces are placeholders. Add only accreditations and ratings the company currently holds.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="ft-top">
+      <div>
+        <img src="img/logo-reverse.png" alt="Tri State Affordable Health Insurance" width="768" height="200">
+        <div class="contact">
+          <span>Member services</span>
+          <strong>1-800-000-0000 (TTY 711)</strong>
+          <span>Monday to Friday, 8 a.m. to 8 p.m.</span>
+          <span>100 Placeholder Avenue, Suite 000, City, ST 00000</span>
+          <span><span class="ph">Placeholder</span> Replace phone, hours and address with real details.</span>
+        </div>
+      </div>
+      <div><h4>Shop</h4><ul><li><a href="#plans">Individual &amp; Family</a></li><li><a href="#plans">Medicare</a></li><li><a href="#plans">Employer plans</a></li><li><a href="#plans">Dental &amp; vision</a></li><li><a href="#quote">Get a quote</a></li></ul></div>
+      <div><h4>Members</h4><ul><li><a href="#members">Sign in</a></li><li><a href="#members">Pay my premium</a></li><li><a href="#members">Claims</a></li><li><a href="#find-care">Find a doctor</a></li><li><a href="#find-care">Drug list</a></li></ul></div>
+      <div><h4>Providers &amp; brokers</h4><ul><li><a href="#">Provider portal</a></li><li><a href="#">Join our network</a></li><li><a href="#">Broker resources</a></li><li><a href="#">Prior authorization</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#">About us</a></li><li><a href="#">Careers</a></li><li><a href="#">Newsroom</a></li><li><a href="#">Report fraud</a></li><li><a href="#contact">Contact us</a></li></ul></div>
+    </div>
+    <div class="legal">
+      <nav aria-label="Legal">
+        <a href="#">Privacy policy</a><a href="#">Terms of use</a><a href="#">Nondiscrimination notice</a><a href="#">Language assistance</a><a href="#">Accessibility</a><a href="#">Transparency in coverage</a><a href="#">Notice of privacy practices</a>
+      </nav>
+      <p>Plans are offered by Tri State Affordable Health Insurance. Not all plans are available in all areas. Benefits, premiums and provider networks vary by plan and location. Review your plan documents for complete details on coverage, limitations and exclusions.</p>
+      <p>&copy; 2026 Tri State Affordable Health Insurance. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+{
+  const tabs=[...document.querySelectorAll('.tabs button')];
+  const cfg={
+    ind:{t:'Find a plan that fits',l:'Who needs coverage',o:['Just me','Me and my spouse','Me and my children','My whole family'],s:['January 1, 2027','February 1, 2027','Not sure yet']},
+    med:{t:'Find a Medicare plan',l:'I am looking for',o:['Medicare Advantage','Prescription drug (Part D)','Not sure, help me decide'],s:['January 1, 2027','When I turn 65','Not sure yet']},
+    emp:{t:'Get a quote for your business',l:'Number of employees',o:['2 to 9','10 to 49','50 to 99','100 or more'],s:['January 1, 2027','February 1, 2027','March 1, 2027']}
+  };
+  const fill=(el,arr)=>{el.innerHTML='';arr.forEach(v=>{const o=document.createElement('option');o.textContent=v;el.appendChild(o)})};
+  const pick=b=>{
+    tabs.forEach(x=>x.setAttribute('aria-selected',x===b));
+    const c=cfg[b.dataset.k];
+    document.getElementById('finderTitle').textContent=c.t;
+    document.getElementById('whoLabel').textContent=c.l;
+    fill(document.getElementById('who'),c.o);fill(document.getElementById('start'),c.s);
+    document.getElementById('finderMsg').classList.remove('on');
+  };
+  tabs.forEach((b,i)=>{
+    b.addEventListener('click',()=>pick(b));
+    b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];n.focus();pick(n)}});
+  });
+  const say=(id,t)=>{const m=document.getElementById(id);m.textContent=t;m.classList.add('on')};
+  document.getElementById('finderForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const z=document.getElementById('zip').value.trim();
+    if(!/^\d{5}$/.test(z)){say('finderMsg','Please enter a 5-digit ZIP code.');document.getElementById('zip').focus();return}
+    say('finderMsg','Plan results for '+z+' will appear here once the quoting system is connected.');
+  });
+  document.getElementById('docForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    say('docMsg','Directory results will appear here once the provider search is connected.');
+  });
+  const mb=document.getElementById('menuBtn'),mn=document.getElementById('mainnav');
+  mb.addEventListener('click',()=>{const o=mn.classList.toggle('open');mb.setAttribute('aria-expanded',o)});
+  mn.addEventListener('click',e=>{if(e.target.tagName==='A'){mn.classList.remove('open');mb.setAttribute('aria-expanded','false')}});
+}
+</script>
+</body>
+</html>
